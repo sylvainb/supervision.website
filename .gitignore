@@ -37,3 +37,6 @@ htmlcov
 man
 .project
 .pydevproject
+src/supervision/website/config.py
+src/supervision/website/reports
+src/supervision/website/utils/check_hosts.sh

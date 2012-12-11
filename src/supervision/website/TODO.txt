@@ -1,0 +1,23 @@
+
+a) Un fichier de configuration avec les HOSTS
+
+b) Un script qui génère le script SH avec HOSTS et TIMEOUT only (utiliser la syntaxe python simple avec %(var_name)s), 
+   monitoring du temps, wget status, archive anciens fichier pour étudier le changement de status
+   wget http://www.asilax.fr --no-check-certificate --timeout=5 -S -q -O - 2>&1  | awk '/^  HTTP/{print $2}'
+   http://www.sectorfej.net/2012/03/24/simple-web-server-availability-monitoring-with-cron-bash-and-wget/
+
+   TODO : sauvegarde ancien status si nécessaire
+          écrire nouveau status avec "$HOST;$RESPONSE;$START;$END" 
+
+c) Un script python qui étudie les fichiers de log :
+   - vérifie le code de retour
+   - détermine le status (cf lien bash) avec le SLOW_THRESHOLD
+   - génère un rapport texte, un rapport HTML, envoi des mails
+
+d) Documentation du README
+
+e) Post du rapport dans un Plone, via une configuration dans le fichier de configuration
+
+f) Support i18n pour les rapports, via une entrée dans le fichier de configuration
+
+g) Tests ?

@@ -1,0 +1,18 @@
+# List of websites to check
+WEBSITE_URIS = [
+	'http://www.yahoo.com',
+	'https://www.google.com',
+	'http://www.france.fr/nous-contacter'
+]
+
+# Requests timeout in second (used by wget calls)
+TIMEOUT = 10
+
+# If response time, in seconds, is greater than SLOW_THRESHOLD, then the website status will be SLOW
+SLOW_THRESHOLD = 7
+
+# Accepted HTTP status codes
+OK_STATUSES = ['200']
+
+# Reports folder, where status files and reports will be added
+REPORTS_PATH = "/tmp/reports"

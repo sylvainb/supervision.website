@@ -1,0 +1,42 @@
+#!/bin/bash
+# Thanks to http://www.sectorfej.net/2012/03/24/simple-web-server-availability-monitoring-with-cron-bash-and-wget/
+
+HOSTS=( \
+    TO_BE_REPLACE_HOSTS
+    )
+
+TIMEOUT=TO_BE_REPLACE_TIMEOUT
+
+REPORT_DIRECTORY="TO_BE_REPLACE_REPORTS_PATH"
+CURRENT_STATUS_FILE="$REPORT_DIRECTORY/sitemonitor.current.status"
+PREVIOUS_STATUS_FILE="$REPORT_DIRECTORY/sitemonitor.previous.status"
+
+# Create files structure if needed
+mkdir -p $REPORT_DIRECTORY
+if [ ! -e $CURRENT_STATUS_FILE ]; then
+    touch $CURRENT_STATUS_FILE
+fi
+if [ ! -e $PREVIOUS_STATUS_FILE ]; then
+    touch $PREVIOUS_STATUS_FILE
+fi
+
+# Backup current status file and remove his content
+mv -f $CURRENT_STATUS_FILE $PREVIOUS_STATUS_FILE
+touch $CURRENT_STATUS_FILE
+
+for HOST in "${HOSTS[@]}"
+do
+    START=$(date +%s)
+    RESPONSE=`wget $HOST --no-check-certificate --timeout=$TIMEOUT -S -q -O - 2>&1 | \
+                  awk '/^  HTTP/{print \$2}'`
+    END=$(date +%s)
+    #DIFF=$(( $END - $START ))
+    
+    if [ -z "$RESPONSE" ]; then
+        # Zero-length ("null") string variable
+        RESPONSE="0"
+    fi
+
+    echo $HOST";"$RESPONSE";"$START";"$END >> $CURRENT_STATUS_FILE
+    
+done
