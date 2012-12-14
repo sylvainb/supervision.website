@@ -25,6 +25,7 @@ def read_status(status_type='current'):
 			# 	 'end_process_date': when the check stop
 			#    'response_time': timedelta
 			#    'http_code': response's HTTP code (200, 404, ...)
+			#    'status': 'OK', 'SLOW', 'KO'
 			#  },
 			#  ...
 		}
@@ -60,12 +61,32 @@ def read_status(status_type='current'):
 				website, http_code, start_timestamp, end_timestamp = infos_line.split(';')
 				start_process_date = datetime.fromtimestamp(int(start_timestamp))
 				end_process_date = datetime.fromtimestamp(int(end_timestamp))
+				response_time = end_process_date - start_process_date
+
+				# Compute status : OK, SLOW or KO, and populate status2hosts dictionary
+				status_ok = http_code in OK_STATUSES
+				status_ok_exception = OK_STATUSES_PER_HOST.get(website, [])
+
+				if status_ok or status_ok_exception:
+					check_status = 'OK'
+					# Website is slow ?
+					if response_time > timedelta(seconds=SLOW_THRESHOLD):
+						check_status = 'SLOW'
+				else:
+					check_status = 'KO'
+
+				# OK status exception ?
+				if status_ok_exception:
+					# add a message for the report
+					http_code += ' (exception)'
+			
 				status['hosts'][website] = {
 					'website': website,
 					'start_process_date': start_process_date,
 					'end_process_date': end_process_date,
-					'response_time': end_process_date - start_process_date,
-					'http_code': http_code
+					'response_time': response_time,
+					'http_code': http_code,
+					'status': check_status
 				}
 
 
@@ -91,33 +112,14 @@ def process_report(current_status, previous_status):
 
 	for key in host_keys:
 		host = current_status['hosts'][key]
-		
-		# Compute status : OK, SLOW or KO, and populate status2hosts dictionary
-		status_ok = host['http_code'] in OK_STATUSES
-		status_ok_exception = OK_STATUSES_PER_HOST.get(key, [])
-
-		if status_ok or status_ok_exception:
-			status = 'OK'
-
-			# Website is slow ?
-			if host['response_time'] > timedelta(seconds=SLOW_THRESHOLD):
-				status = 'SLOW'
-
-		else:
-			status = 'KO'
-
+		status = host['status']
 		status2hosts[status].append(host)
 
 		# Change from the previous status ?
-		# -> if the website is new or if the HTTP code has changed
+		# -> if the website is new or if the status has changed
 		previous_host = previous_status['hosts'].get(key, None)
-		if previous_host is None or previous_host['http_code'] != host['http_code']:
+		if previous_host is None or previous_host['status'] != status:
 			has_change = True
-
-		# OK status exception ?
-		if status_ok_exception:
-			# add a message for the report
-			host['http_code'] += ' (exception)'
 
 	# Generate TEXT report
 	with open('%s/report.txt' % REPORTS_PATH, 'w') as f:

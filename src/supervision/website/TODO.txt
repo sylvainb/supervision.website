@@ -1,6 +1,3 @@
-!!!! Problème : il ne faut pas regarder le changement de code HTTP mais le changement de status !!!!!
-     en comparant les anciens et les nouveaux (donc calculer les STATUS dans le get config)
-
 a) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
    # TODO : le cron doit : activer l'environnement, generer le script depuis la configuration, lancer le check puis lancer le report
 
@@ -14,9 +11,10 @@ a) Documentation du README pour installer le cron, et une rapide définition des
    Tracks previous state change and last update to avoid multiple notifications
    Uses single text file for data storage, no DB necessary
 
-f) Support i18n pour les rapports, via une entrée dans le fichier de configuration pour le choix de la langue
+f) Tests (en patchant le path de 'reports', l'envoi des emails), piloté par le coverage !!!!!
+   tester toutes les combinaisons de changement de status ok, ko, slow
 
-g) Tests (en patchant le path de 'reports', l'envoi des emails), piloté par le coverage !!!!!
+g) Support i18n pour les rapports, via une entrée dans le fichier de configuration pour le choix de la langue
 
 h) Déploiement
 
