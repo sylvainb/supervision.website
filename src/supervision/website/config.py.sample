@@ -38,5 +38,8 @@ MAIL_SEND_ONLY_ON_CHANGE = True
 MAIL_SEND_FROM = 'supervisor@website.com'
 MAIL_SEND_TO = 'supervisor@website.com'
 MAIL_SUBJECT = 'Websites supervision report'
-# body format values are 'txt' and 'html'
-MAIL_BODY_FORMAT = 'txt'
+
+# SMTP settings
+SMTP = 'localhost'
+SMTP_USER = '' # used if not empty
+SMTP_PASSWORD = '' # used if not empty

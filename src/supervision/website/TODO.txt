@@ -1,19 +1,8 @@
 
-OK a) Un fichier de configuration avec les HOSTS
-
-OK b) Un script qui génère le script SH avec HOSTS
-
-c) Un script python qui étudie les fichiers de log :
-   - OK vérifie le code de retour
-   - OK détermine le status (cf lien bash) avec le SLOW_THRESHOLD
-   - génère OK un rapport texte, 
-            OK un rapport HTML
-               envoi des mails
-
-d) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
+a) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
    # TODO : le cron doit : activer l'environnement, generer le script depuis la configuration, lancer le check puis lancer le report
 
-   Requires bash, wget, and working “mail” command (sendmail, exim, postfix, etc.)
+   Requires bash, wget, and working smtp
    Monitors any HTTP or HTTPS URL, checking for “200″ status returned
    Checks request fulfillment time for slow responses, not just UP/DOWN
    Sends email notification on state change (UP, SLOW, or DOWN)
@@ -23,10 +12,9 @@ d) Documentation du README pour installer le cron, et une rapide définition des
    Tracks previous state change and last update to avoid multiple notifications
    Uses single text file for data storage, no DB necessary
 
-e) Post du rapport dans un Plone, via une configuration dans le fichier de configuration
+f) Support i18n pour les rapports, via une entrée dans le fichier de configuration pour le choix de la langue
 
-f) Support i18n pour les rapports, via une entrée dans le fichier de configuration
+g) Tests (en patchant le path de 'reports', l'envoi des emails), piloté par le coverage !!!!!
 
-g) Tests (en patchant le path de 'reports', l'envoi des emails)
-
+h) Déploiement
 

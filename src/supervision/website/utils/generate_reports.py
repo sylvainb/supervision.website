@@ -1,5 +1,10 @@
 import os
 from datetime import datetime, timedelta
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from supervision.website.config import *
 
 def read_status(status_type='current'):
@@ -98,10 +103,6 @@ def process_report(current_status, previous_status):
 			if host['response_time'] > timedelta(seconds=SLOW_THRESHOLD):
 				status = 'SLOW'
 
-			# OK status exception ?
-			if status_ok_exception:
-				host['http_code'] += ' (exception)'
-			
 		else:
 			status = 'KO'
 
@@ -112,6 +113,11 @@ def process_report(current_status, previous_status):
 		previous_host = previous_status['hosts'].get(key, None)
 		if previous_host is None or previous_host['http_code'] != host['http_code']:
 			has_change = True
+
+		# OK status exception ?
+		if status_ok_exception:
+			# add a message for the report
+			host['http_code'] += ' (exception)'
 
 	# Generate TEXT report
 	with open('%s/report.txt' % REPORTS_PATH, 'w') as f:
@@ -125,7 +131,7 @@ def process_report(current_status, previous_status):
 			if not status2hosts.get(status, []):
 				continue
 
-			f.write('\n\nSTATUT : %s\n' % status)
+			f.write('\n\nSTATUS : %s\n' % status)
 			for host in status2hosts[status]:
 				f.write('%s : response time = %s : HTTP code : %s\n' % (
 					host['website'],
@@ -154,8 +160,15 @@ def process_report(current_status, previous_status):
 			
 			for host in status2hosts[status]:
 				f.write('<tr class="%s">\n' % status)
+				status_text = '<span style="color:%s">%s</span>' % (
+					{'KO': 'red',
+					 'SLOW': 'orange',
+					 'OK': 'green'
+					}.get(status),
+					status
+				)
 				f.write('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n' % (
-					status,
+					status_text,
 					host['website'],
 					host['response_time'],
 					host['http_code']
@@ -167,19 +180,62 @@ def process_report(current_status, previous_status):
 		f.write('</table> \n')
 
 	# Send email
+	send_report_by_mail(has_change)
+
+
+def send_report_by_mail(has_change):
+	""" If asked in the configuration, send report by mail.
+	    has_change : boolean, True if there are some changes, else False
 	"""
-	##### Mail configuration #####
-	# Do you want reports by email ?
-	MAIL_SEND = True
-	# Send an email only when something change ?
-	MAIL_SEND_ONLY_ON_CHANGE = True
-	# Mail settings
-	MAIL_SEND_FROM = 'supervisor@website.com'
-	MAIL_SEND_TO = 'supervisor@website.com'
-	MAIL_SUBJECT = 'Websites supervision report'
-	# body format values are 'txt' and 'html'
-	MAIL_BODY_FORMAT = 'txt'
-	"""
+
+	if not MAIL_SEND:
+		# Don't send mail
+		return
+
+	if not has_change and MAIL_SEND_ONLY_ON_CHANGE:
+		# No changes and send mail only on change
+		return
+	
+	# Create message container - the correct MIME type is multipart/alternative.
+	msg = MIMEMultipart('alternative')
+	msg['Subject'] = MAIL_SUBJECT
+	msg['From'] = MAIL_SEND_FROM
+	msg['To'] = MAIL_SEND_TO
+
+	# Create the body of the message (a plain-text and an HTML version).
+	# plain-text
+	ftext = open('%s/report.txt' % REPORTS_PATH, 'r')
+	text = ftext.read()
+	ftext.close()
+	# html
+	fhtml = open('%s/report.html' % REPORTS_PATH, 'r')
+	html = """\
+	<html>
+	  <head></head>
+	  <body>
+	    %s
+	  </body>
+	</html>
+	""" % fhtml.read()
+	fhtml.close()
+
+	# Record the MIME types of both parts - text/plain and text/html.
+	part1 = MIMEText(text, 'plain')
+	part2 = MIMEText(html, 'html')
+
+	# Attach parts into message container.
+	# According to RFC 2046, the last part of a multipart message, in this case
+	# the HTML message, is best and preferred.
+	msg.attach(part1)
+	msg.attach(part2)
+
+	# Send the message via local SMTP server.
+	s = smtplib.SMTP(SMTP)
+	if SMTP_USER != '':
+		s.login(SMTP_USER, SMTP_PASSWORD)
+	s.sendmail(MAIL_SEND_FROM, MAIL_SEND_TO, msg.as_string())
+	s.quit()
+
 
 if __name__ == '__main__':
 	current_status = read_status(status_type='current')
