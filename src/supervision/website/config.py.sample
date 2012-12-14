@@ -1,18 +1,38 @@
-# List of websites to check
+###### List of websites to monitor #####
+
 WEBSITE_URIS = [
 	'http://www.yahoo.com',
 	'https://www.google.com',
 	'http://www.france.fr/nous-contacter'
 ]
 
+##### Timeout and status #####
+
 # Requests timeout in second (used by wget calls)
 TIMEOUT = 10
 
-# If response time, in seconds, is greater than SLOW_THRESHOLD, then the website status will be SLOW
-SLOW_THRESHOLD = 7
+# If response time, in seconds, is greater than SLOW_THRESHOLD, then the website is considering slow
+SLOW_THRESHOLD = 5
 
 # Accepted HTTP status codes
 OK_STATUSES = ['200']
 
+##### Reports #####
+
 # Reports folder, where status files and reports will be added
-REPORTS_PATH = "/tmp/reports"
+REPORTS_PATH = "/Users/sbo/Documents/usine-plone/eggs/supervision.website/src/supervision/website/reports"
+
+##### Mail configuration #####
+
+# Do you want reports by email ?
+MAIL_SEND = True
+
+# Send an email only when something change ?
+MAIL_SEND_ONLY_ON_CHANGE = True
+
+# Mail settings
+MAIL_SEND_FROM = 'supervisor@website.com'
+MAIL_SEND_TO = 'supervisor@website.com'
+MAIL_SUBJECT = 'Websites supervision report'
+# body format values are 'txt' and 'html'
+MAIL_BODY_FORMAT = 'txt'

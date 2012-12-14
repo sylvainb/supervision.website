@@ -24,6 +24,8 @@ fi
 mv -f $CURRENT_STATUS_FILE $PREVIOUS_STATUS_FILE
 touch $CURRENT_STATUS_FILE
 
+echo "BEGIN_DATE:"$(date +%s) >> $CURRENT_STATUS_FILE
+
 for HOST in "${HOSTS[@]}"
 do
     START=$(date +%s)
@@ -37,6 +39,8 @@ do
         RESPONSE="0"
     fi
 
-    echo $HOST";"$RESPONSE";"$START";"$END >> $CURRENT_STATUS_FILE
+    echo "HOST:"$HOST";"$RESPONSE";"$START";"$END >> $CURRENT_STATUS_FILE
     
 done
+
+echo "END_DATE:"$(date +%s) >> $CURRENT_STATUS_FILE
