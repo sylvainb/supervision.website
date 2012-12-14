@@ -1,3 +1,5 @@
+!!!! Problème : il ne faut pas regarder le changement de code HTTP mais le changement de status !!!!!
+     en comparant les anciens et les nouveaux (donc calculer les STATUS dans le get config)
 
 a) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
    # TODO : le cron doit : activer l'environnement, generer le script depuis la configuration, lancer le check puis lancer le report

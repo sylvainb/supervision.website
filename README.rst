@@ -34,18 +34,18 @@ Quickly test ?
 
 Download ``supervision.website`` and use ``virtualenv`` to test the module::
 
-	easy_install virtualenv
-	cd supervision.website
-	chmod +x test-module.sh
-  ./test-module.sh
+    easy_install virtualenv
+    cd supervision.website
+    chmod +x test-module.sh
+    ./test-module.sh
 
-	source bin/activate
-  (supervision.website) python
-  >>> import supervision.website
+    source bin/activate
+    (supervision.website) python
+    >>> import supervision.website
 
 Launch tests with nose <https://nose.readthedocs.org/en/latest/>`_ ::
 
-	(supervision.website) nosetests
+    (supervision.website) nosetests
 
 Launch code coverage::
 
