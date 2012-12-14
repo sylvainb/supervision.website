@@ -73,6 +73,7 @@ def process_report(current_status, previous_status):
 
 	start_process_date_str = current_status['start_process_date'].strftime('%Y/%m/%d %H:%M:%S')
 	end_process_date_str = current_status['end_process_date'].strftime('%Y/%m/%d %H:%M:%S')
+	process_time_str = str(current_status['end_process_date'] - current_status['start_process_date'])
 
 	host_keys = current_status['hosts'].keys()
 	host_keys.sort()
@@ -87,10 +88,20 @@ def process_report(current_status, previous_status):
 		host = current_status['hosts'][key]
 		
 		# Compute status : OK, SLOW or KO, and populate status2hosts dictionary
-		if host['http_code'] in OK_STATUSES:
+		status_ok = host['http_code'] in OK_STATUSES
+		status_ok_exception = OK_STATUSES_PER_HOST.get(key, [])
+
+		if status_ok or status_ok_exception:
 			status = 'OK'
+
+			# Website is slow ?
 			if host['response_time'] > timedelta(seconds=SLOW_THRESHOLD):
 				status = 'SLOW'
+
+			# OK status exception ?
+			if status_ok_exception:
+				host['http_code'] += ' (exception)'
+			
 		else:
 			status = 'KO'
 
@@ -105,8 +116,9 @@ def process_report(current_status, previous_status):
 	# Generate TEXT report
 	with open('%s/report.txt' % REPORTS_PATH, 'w') as f:
 
-		f.write('Start process date : %s\n' % start_process_date_str)
-		f.write('End process date : %s\n' % end_process_date_str)
+		f.write('Start date : %s\n' % start_process_date_str)
+		f.write('End date : %s\n' % end_process_date_str)
+		f.write('Process time : %s\n' % process_time_str)
 
 		for status in ['KO', 'SLOW', 'OK']:
 
@@ -125,8 +137,9 @@ def process_report(current_status, previous_status):
 	# Generate HTML report
 	with open('%s/report.html' % REPORTS_PATH, 'w') as f:
 
-		f.write('<div><strong>Start process date</strong>: %s</div>\n' % start_process_date_str)
-		f.write('<div><strong>End process date</strong> : %s</div>\n' % end_process_date_str)
+		f.write('<div><strong>Start date</strong> : %s</div>\n' % start_process_date_str)
+		f.write('<div><strong>End date</strong> : %s</div>\n' % end_process_date_str)
+		f.write('<div><strong>Process time</strong> : %s</div>\n' % process_time_str)
 
 		f.write('\n\n')
 		f.write('<table id="websites">\n')

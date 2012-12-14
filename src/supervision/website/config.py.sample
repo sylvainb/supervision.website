@@ -15,7 +15,11 @@ TIMEOUT = 10
 SLOW_THRESHOLD = 5
 
 # Accepted HTTP status codes
-OK_STATUSES = ['200']
+OK_STATUSES = ['200', '302 200']
+# Exeptions per host
+OX_STATUSES_PER_HOST = {
+	'https://www.website.com': ['302 302 403']
+}
 
 ##### Reports #####
 

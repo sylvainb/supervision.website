@@ -11,7 +11,7 @@ c) Un script python qui étudie les fichiers de log :
                envoi des mails
 
 d) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
-   # TODO : le cron doit : activer l'environnement, lancer le check puis lancer le report
+   # TODO : le cron doit : activer l'environnement, generer le script depuis la configuration, lancer le check puis lancer le report
 
    Requires bash, wget, and working “mail” command (sendmail, exim, postfix, etc.)
    Monitors any HTTP or HTTPS URL, checking for “200″ status returned
