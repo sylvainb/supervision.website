@@ -1,9 +1,13 @@
+###### System ######
+WGET_COMMAND='/opt/local/bin/wget'
+
 ###### List of websites to monitor #####
 
 WEBSITE_URIS = [
 	'http://www.yahoo.com',
 	'https://www.google.com',
-	'http://www.france.fr/nous-contacter'
+	'http://www.france.fr/nous-contacter',
+	'https://www.mycrm.com'
 ]
 
 ##### Timeout and status #####
@@ -18,7 +22,7 @@ SLOW_THRESHOLD = 5
 OK_STATUSES = ['200', '302 200']
 # Exeptions per host
 OX_STATUSES_PER_HOST = {
-	'https://www.website.com': ['302 302 403']
+	'https://www.mycrm.com': ['302 302 403']
 }
 
 ##### Reports #####

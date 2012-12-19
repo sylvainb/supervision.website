@@ -10,6 +10,7 @@ def generate_sh_script():
 	script = script.replace('TO_BE_REPLACE_TIMEOUT', str(TIMEOUT))
 	script = script.replace('TO_BE_REPLACE_HOSTS', '\n'.join((['"%s" \\' % uri for uri in WEBSITE_URIS])))
 	script = script.replace('TO_BE_REPLACE_REPORTS_PATH', REPORTS_PATH)
+	script = script.replace('TO_BE_REPLACE_WGET', WGET_COMMAND)
 
 	with open('check_hosts.sh', 'w') as f:
 		f.write(script)

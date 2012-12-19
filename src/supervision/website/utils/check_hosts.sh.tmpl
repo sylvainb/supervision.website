@@ -29,7 +29,7 @@ echo "BEGIN_DATE:"$(date +%s) >> $CURRENT_STATUS_FILE
 for HOST in "${HOSTS[@]}"
 do
     START=$(date +%s)
-    RESPONSE=`wget $HOST --no-check-certificate --timeout=$TIMEOUT -S -q -O - 2>&1 | \
+    RESPONSE=`TO_BE_REPLACE_WGET $HOST --no-check-certificate --timeout=$TIMEOUT -S -q -O - 2>&1 | \
                   awk '/^  HTTP/{print \$2}'`
     END=$(date +%s)
     #DIFF=$(( $END - $START ))
