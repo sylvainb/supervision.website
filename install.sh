@@ -1,7 +1,7 @@
 #!/bin/bash
-# ./test-module.sh
+# ./install.sh
 # ===> create virtualenv, install the module
-# ./test-set-buildout.sh clean
+# ./install.sh clean
 # ===> ATTENTION: remove virtualenv files, create virtualenv, and install the module
 
 function print() 
@@ -31,6 +31,7 @@ fi
 print "Install the module"
 source bin/activate
 pip install -e .
+chmod u+x install.sh
 pip install coverage
 pip install nose
 
