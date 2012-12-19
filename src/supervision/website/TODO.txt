@@ -1,15 +1,10 @@
-a) Documentation du README pour installer le cron, et une rapide définition des variables de configuration
-   # TODO : le cron doit : activer l'environnement, generer le script depuis la configuration, lancer le check puis lancer le report
+Ajouter à config.py le paramètrage du path du wget (mac: /opt/local/bin/wget) sinon ça ne fonctionne pas dans le cron.
+Revoir en conséquance la génération du script bash. Retester mon cron et penser à l'enlever.
 
-   Requires bash, wget, and working smtp
-   Monitors any HTTP or HTTPS URL, checking for “200″ status returned
-   Checks request fulfillment time for slow responses, not just UP/DOWN
-   Sends email notification on state change (UP, SLOW, or DOWN)
-   Report generation in text and HTML
-   Customizable To/From notification settings
-   Customizable SLOW latency threshold
-   Tracks previous state change and last update to avoid multiple notifications
-   Uses single text file for data storage, no DB necessary
+Ajouter aux rapports les anciens status avec couleur pour voir ce qui a changé (et que si ça a changé)
+EXEMPLE = OK (was SLOW)
+
+retester toute la procédure de déploiement
 
 f) Tests (en patchant le path de 'reports', l'envoi des emails), piloté par le coverage !!!!!
    tester toutes les combinaisons de changement de status ok, ko, slow

@@ -243,9 +243,9 @@ if __name__ == '__main__':
 	current_status = read_status(status_type='current')
 	previous_status = read_status(status_type='previous')
 
-	import pprint
-	pp = pprint.PrettyPrinter(indent=4)
-	pp.pprint(current_status)
+	#import pprint
+	#pp = pprint.PrettyPrinter(indent=4)
+	#pp.pprint(current_status)
 
 	process_report(current_status, previous_status)
 
