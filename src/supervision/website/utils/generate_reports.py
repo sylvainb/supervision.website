@@ -93,15 +93,15 @@ def read_status(status_type='current'):
 
 	return status
 
-def process_report(current_status, previous_status):
+def process_report(current_datas, previous_datas):
 	""" Process current and previous status, generate TXT/HTML reports and send emails """
 	has_change = False # say a there is a change between previous and current status
 
-	start_process_date_str = current_status['start_process_date'].strftime('%Y/%m/%d %H:%M:%S')
-	end_process_date_str = current_status['end_process_date'].strftime('%Y/%m/%d %H:%M:%S')
-	process_time_str = str(current_status['end_process_date'] - current_status['start_process_date'])
+	start_process_date_str = current_datas['start_process_date'].strftime('%Y/%m/%d %H:%M:%S')
+	end_process_date_str = current_datas['end_process_date'].strftime('%Y/%m/%d %H:%M:%S')
+	process_time_str = str(current_datas['end_process_date'] - current_datas['start_process_date'])
 
-	host_keys = current_status['hosts'].keys()
+	host_keys = current_datas['hosts'].keys()
 	host_keys.sort()
 
 	status2hosts = {
@@ -111,14 +111,24 @@ def process_report(current_status, previous_status):
 	}
 
 	for key in host_keys:
-		host = current_status['hosts'][key]
+		host = current_datas['hosts'][key]
+
+		# Keep some information about the previous host
+		previous_host = previous_datas['hosts'].get(key, None)
+		if previous_host is not None:
+			previous_http_code = previous_host['http_code']
+			previous_status = previous_host['status']
+		else:
+			previous_http_code = 'unknown'
+			previous_status = 'unknown'
+		host['previous_http_code'] = previous_http_code
+		host['previous_status'] = previous_status
+
 		status = host['status']
 		status2hosts[status].append(host)
 
-		# Change from the previous status ?
-		# -> if the website is new or if the status has changed
-		previous_host = previous_status['hosts'].get(key, None)
-		if previous_host is None or previous_host['status'] != status:
+		# Change from the previous status or the previous HTTP code ?
+		if status != previous_status or host['http_code'] != previous_http_code:
 			has_change = True
 
 	# Generate TEXT report
@@ -135,10 +145,12 @@ def process_report(current_status, previous_status):
 
 			f.write('\n\nSTATUS : %s\n' % status)
 			for host in status2hosts[status]:
-				f.write('%s : response time = %s : HTTP code : %s\n' % (
+				f.write('%s : response time = %s : HTTP code : %s : Previous status : %s : Previous HTTP code : %s\n' % (
 					host['website'],
 					host['response_time'],
-					host['http_code']
+					host['http_code'],
+					host['previous_status'],
+					host['previous_http_code']
 					)
 				)
 
@@ -152,7 +164,7 @@ def process_report(current_status, previous_status):
 		f.write('\n\n')
 		f.write('<table id="websites">\n')
 		f.write('<tr>\n')
-		f.write('<th>Status</th><th>Host</th><th>Response time</th><th>HTTP code</th>\n')
+		f.write('<th>Status</th><th>Host</th><th>Response time</th><th>HTTP code</th><th>Previous status</th><th>Previous HTTP code</th>\n')
 		f.write('</tr>\n')
 
 		for status in ['KO', 'SLOW', 'OK']:
@@ -162,18 +174,20 @@ def process_report(current_status, previous_status):
 			
 			for host in status2hosts[status]:
 				f.write('<tr class="%s">\n' % status)
-				status_text = '<span style="color:%s">%s</span>' % (
-					{'KO': 'red',
-					 'SLOW': 'orange',
-					 'OK': 'green'
-					}.get(status),
-					status
-				)
-				f.write('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n' % (
+				status2color = {
+					'KO': 'red',
+					'SLOW': 'orange',
+					'OK': 'green'
+				}
+				status_text = '<span style="color:%s">%s</span>' % (status2color.get(status), status)
+				previous_status_text = '<span style="color:%s">%s</span>' % (status2color.get(host['previous_status']), host['previous_status'])
+				f.write('<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n' % (
 					status_text,
 					host['website'],
 					host['response_time'],
-					host['http_code']
+					host['http_code'],
+					previous_status_text,
+					host['previous_http_code']
 					)
 				)
 				f.write('</tr>\n')

@@ -1,9 +1,3 @@
-Ajouter à config.py le paramètrage du path du wget (mac: /opt/local/bin/wget) sinon ça ne fonctionne pas dans le cron.
-Revoir en conséquance la génération du script bash. Retester mon cron et penser à l'enlever.
-
-Ajouter aux rapports les anciens status avec couleur pour voir ce qui a changé (et que si ça a changé)
-EXEMPLE = OK (was SLOW)
-
 retester toute la procédure de déploiement
 
 f) Tests (en patchant le path de 'reports', l'envoi des emails), piloté par le coverage !!!!!
