@@ -31,7 +31,6 @@ fi
 print "Install the module"
 source bin/activate
 pip install -e .
-chmod u+x install.sh
 pip install coverage
 pip install nose
 

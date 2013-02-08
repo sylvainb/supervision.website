@@ -39,9 +39,9 @@ Install in a virtualenv
 
 Download ``supervision.website`` and use ``virtualenv`` to test the module::
 
-    easy_install virtualenv
+    sudo apt-get install python-virtualenv
     cd supervision.website
-    chmod +x test-module.sh
+    chmod +x install.sh
     ./install.sh
 
     source bin/activate
