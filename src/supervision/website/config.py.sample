@@ -1,5 +1,6 @@
 ###### System ######
 WGET_COMMAND='/opt/local/bin/wget'
+# debian : WGET_COMMAND='/usr/bin/wget'
 
 ###### List of websites to monitor #####
 
@@ -21,7 +22,7 @@ SLOW_THRESHOLD = 5
 # Accepted HTTP status codes
 OK_STATUSES = ['200', '302 200']
 # Exeptions per host
-OX_STATUSES_PER_HOST = {
+OK_STATUSES_PER_HOST = {
 	'https://www.mycrm.com': ['302 302 403']
 }
 
