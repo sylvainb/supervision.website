@@ -35,6 +35,8 @@ WEBSITE_URIS = [
 	 'ok_status_exceptions': ['302 302 403']
 	}
 ]
+WEBSITE_URLS_DICT = {}
+for el in WEBSITE_URLS: WEBSITE_URLS_DICT[el['url']] = el
 
 ##### Reports #####
 
