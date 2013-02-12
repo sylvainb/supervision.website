@@ -2,29 +2,39 @@
 WGET_COMMAND='/opt/local/bin/wget'
 # debian : WGET_COMMAND='/usr/bin/wget'
 
-###### List of websites to monitor #####
-
-WEBSITE_URIS = [
-	'http://www.yahoo.com',
-	'https://www.google.com',
-	'http://www.france.fr/nous-contacter',
-	'https://www.mycrm.com'
-]
-
 ##### Timeout and status #####
 
 # Requests timeout in second (used by wget calls)
 TIMEOUT = 10
 
 # If response time, in seconds, is greater than SLOW_THRESHOLD, then the website is considering slow
-SLOW_THRESHOLD = 5
+# This threshold can be overrided per host.
+DEFAUL_SLOW_THRESHOLD = 5
 
-# Accepted HTTP status codes
+# Accepted HTTP status codes for all hosts.
+# Additionnel status exceptions can be added per host.
 OK_STATUSES = ['200', '302 200']
-# Exeptions per host
-OK_STATUSES_PER_HOST = {
-	'https://www.mycrm.com': ['302 302 403']
-}
+
+###### List of websites to monitor #####
+
+WEBSITE_URIS = [
+	{'uri': 'http://www.yahoo.com',
+	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+	 'ok_status_exceptions': []
+	},
+	{'uri': 'https://www.google.com',
+	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+	 'ok_status_exceptions': []
+	},
+	{'uri': 'http://www.france.fr/nous-contacter',
+	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+	 'ok_status_exceptions': []
+	},
+	{'uri': 'https://www.mycrm.com',
+	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+	 'ok_status_exceptions': ['302 302 403']
+	}
+]
 
 ##### Reports #####
 
