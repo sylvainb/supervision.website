@@ -70,7 +70,7 @@ def read_status(status_type='current'):
 				if status_ok or status_ok_exception:
 					check_status = 'OK'
 					# Website is slow ?
-					if response_time > timedelta(seconds=WEBSITE_URIS_DICT[website]['slow_threshold']):
+					if response_time > timedelta(seconds=WEBSITE_URLS_DICT[website]['slow_threshold']):
 						check_status = 'SLOW'
 				else:
 					check_status = 'KO'

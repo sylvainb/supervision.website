@@ -8,7 +8,7 @@ def generate_sh_script():
 		script = f.read()
 	
 	script = script.replace('TO_BE_REPLACE_TIMEOUT', str(TIMEOUT))
-	script = script.replace('TO_BE_REPLACE_HOSTS', '\n'.join((['"%s" \\' % uri['uri'] for uri in WEBSITE_URIS])))
+	script = script.replace('TO_BE_REPLACE_HOSTS', '\n'.join((['"%s" \\' % url['url'] for url in WEBSITE_URLS])))
 	script = script.replace('TO_BE_REPLACE_REPORTS_PATH', REPORTS_PATH)
 	script = script.replace('TO_BE_REPLACE_WGET', WGET_COMMAND)
 
