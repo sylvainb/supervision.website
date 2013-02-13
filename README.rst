@@ -12,7 +12,7 @@ Goals :
 
     * Monitor HTTP and HTTPS URL, checking for valid HTTP status returned.
     * Compute state for each URL : OK (up), SLOW (slow response), KO (down).
-    * Send email on state change (text and HTML report).
+    * Send email (text and HTML report) on state change (OK/SLOW -> KO, KO -> OK/SLOW) or if the website remains slow.
     * Use simple text files for data storage, no database necessary.
 
 Configuration available : 

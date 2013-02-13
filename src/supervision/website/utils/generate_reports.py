@@ -138,11 +138,27 @@ def process_report(current_datas, previous_datas):
 		status = host['status']
 		status2hosts[status].append(host)
 
-		# Change from the previous status or the previous HTTP code ?
-		http_code_has_change = host['http_code'] != previous_http_code
-
-		if status != previous_status or http_code_has_change:
+		# Change ?
+		if host['http_code'] != previous_http_code:
+			# The HTTP code has change
 			has_change = True
+		elif status != previous_status \
+		     and (status == STATUS_KO or previous_status == STATUS_KO):
+		    # ('OK', 'KO') - now up (was down)
+		    # ('SLOW', 'KO') - now up (was down)
+		    # ('KO', 'OK') - now down (was up)
+		    # ('KO', 'SLOW') - now down (was up)
+			has_change = True
+		elif status == previous_status == STATUS_SLOW:
+			# The website remains slow
+			# ('SLOW', 'SLOW')
+			has_change = True
+		else:
+			# ('OK', 'OK')
+			# ('KO', 'KO')
+			# ('OK', 'SLOW')
+			# ('SLOW', 'OK')
+			has_change = False
 
 	# Generate TEXT report
 	with open('%s/report.txt' % REPORTS_PATH, 'w') as f:

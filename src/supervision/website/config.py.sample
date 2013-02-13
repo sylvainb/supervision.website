@@ -18,22 +18,22 @@ OK_STATUSES = ['200', '302 200']
 ###### List of websites to monitor #####
 
 WEBSITE_URLS = [
-	{'url': 'http://www.yahoo.com',
-	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-	 'ok_status_exceptions': []
-	},
-	{'url': 'https://www.google.com',
-	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-	 'ok_status_exceptions': []
-	},
-	{'url': 'http://www.france.fr/nous-contacter',
-	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-	 'ok_status_exceptions': []
-	},
-	{'url': 'https://www.mycrm.com',
-	 'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-	 'ok_status_exceptions': ['302 302 403']
-	}
+    {'url': 'http://www.yahoo.com',
+     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+     'ok_status_exceptions': []
+    },
+    {'url': 'https://www.google.com',
+     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+     'ok_status_exceptions': []
+    },
+    {'url': 'http://www.france.fr/nous-contacter',
+     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+     'ok_status_exceptions': []
+    },
+    {'url': 'https://www.mycrm.com',
+     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+     'ok_status_exceptions': ['302 302 403']
+    }
 ]
 WEBSITE_URLS_DICT = {}
 for el in WEBSITE_URLS: WEBSITE_URLS_DICT[el['url']] = el
