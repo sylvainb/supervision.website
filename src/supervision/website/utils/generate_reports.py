@@ -7,6 +7,10 @@ from email.mime.text import MIMEText
 
 from supervision.website.config import *
 
+STATUS_OK = 'OK'
+STATUS_KO = 'KO'
+STATUS_SLOW = 'SLOW'
+
 def read_status(status_type='current'):
 	""" Return a dictionary representing the current or previous status.
 	    If the status file is not found, return an empty dictionaty.
@@ -25,7 +29,7 @@ def read_status(status_type='current'):
 			# 	 'end_process_date': when the check stop
 			#    'response_time': timedelta
 			#    'http_code': response's HTTP code (200, 404, ...)
-			#    'status': 'OK', 'SLOW', 'KO'
+			#    'status': STATUS_OK, STATUS_SLOW, STATUS_KO
 			#  },
 			#  ...
 		}
@@ -65,15 +69,22 @@ def read_status(status_type='current'):
 
 				# Compute status : OK, SLOW or KO, and populate status2hosts dictionary
 				status_ok = http_code in OK_STATUSES
-				status_ok_exception = http_code in WEBSITE_URLS_DICT[website]['ok_status_exceptions']
+				if website in WEBSITE_URLS_DICT:
+					status_ok_exception = http_code in WEBSITE_URLS_DICT[website]['ok_status_exceptions']
+				else:
+					status_ok_exception = False
 
 				if status_ok or status_ok_exception:
-					check_status = 'OK'
+					check_status = STATUS_OK
+					if website in WEBSITE_URLS_DICT:
+						slow_threshold = WEBSITE_URLS_DICT[website]['slow_threshold']
+					else:
+						slow_threshold = DEFAUL_SLOW_THRESHOLD
 					# Website is slow ?
-					if response_time > timedelta(seconds=WEBSITE_URLS_DICT[website]['slow_threshold']):
-						check_status = 'SLOW'
+					if response_time > timedelta(seconds=slow_threshold):
+						check_status = STATUS_SLOW
 				else:
-					check_status = 'KO'
+					check_status = STATUS_KO
 
 				# OK status exception ?
 				if status_ok_exception:
@@ -105,9 +116,9 @@ def process_report(current_datas, previous_datas):
 	host_keys.sort()
 
 	status2hosts = {
-		'OK': [],
-		'KO': [],
-		'SLOW': []
+		STATUS_OK: [],
+		STATUS_KO: [],
+		STATUS_SLOW: []
 	}
 
 	for key in host_keys:
@@ -128,7 +139,9 @@ def process_report(current_datas, previous_datas):
 		status2hosts[status].append(host)
 
 		# Change from the previous status or the previous HTTP code ?
-		if status != previous_status or host['http_code'] != previous_http_code:
+		http_code_has_change = host['http_code'] != previous_http_code
+
+		if status != previous_status or http_code_has_change:
 			has_change = True
 
 	# Generate TEXT report
@@ -138,7 +151,7 @@ def process_report(current_datas, previous_datas):
 		f.write('End date : %s\n' % end_process_date_str)
 		f.write('Process time : %s\n' % process_time_str)
 
-		for status in ['KO', 'SLOW', 'OK']:
+		for status in [STATUS_KO, STATUS_SLOW, STATUS_OK]:
 
 			if not status2hosts.get(status, []):
 				continue
@@ -167,7 +180,7 @@ def process_report(current_datas, previous_datas):
 		f.write('<th>Status</th><th>Host</th><th>Response time</th><th>HTTP code</th><th>Previous status</th><th>Previous HTTP code</th>\n')
 		f.write('</tr>\n')
 
-		for status in ['KO', 'SLOW', 'OK']:
+		for status in [STATUS_KO, STATUS_SLOW, STATUS_OK]:
 
 			if not status2hosts.get(status, []):
 				continue
@@ -175,9 +188,9 @@ def process_report(current_datas, previous_datas):
 			for host in status2hosts[status]:
 				f.write('<tr class="%s">\n' % status)
 				status2color = {
-					'KO': 'red',
-					'SLOW': 'orange',
-					'OK': 'green'
+					STATUS_KO: 'red',
+					STATUS_SLOW: 'orange',
+					STATUS_OK: 'green'
 				}
 				status_text = '<span style="color:%s">%s</span>' % (status2color.get(status), status)
 				previous_status_text = '<span style="color:%s">%s</span>' % (status2color.get(host['previous_status']), host['previous_status'])
