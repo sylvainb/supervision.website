@@ -139,7 +139,10 @@ def process_report(current_datas, previous_datas):
 		status2hosts[status].append(host)
 
 		# Change ?
-		if host['http_code'] != previous_http_code:
+		if has_change == True:
+			# There was a change for a previous host
+			pass
+		elif host['http_code'] != previous_http_code:
 			# The HTTP code has change
 			has_change = True
 		elif status != previous_status \
@@ -158,7 +161,7 @@ def process_report(current_datas, previous_datas):
 			# ('KO', 'KO')
 			# ('OK', 'SLOW')
 			# ('SLOW', 'OK')
-			has_change = False
+			pass
 
 	# Generate TEXT report
 	with open('%s/report.txt' % REPORTS_PATH, 'w') as f:
