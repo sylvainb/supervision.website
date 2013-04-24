@@ -37,31 +37,31 @@ Installation
 Install in a virtualenv
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Download ``supervision.website`` and use ``virtualenv`` to test the module::
+Download ``supervision.website`` and use ``virtualenv`` to test the module :
+::
+  sudo apt-get install python-virtualenv
+  cd supervision.website
+  chmod +x install.sh
+  ./install.sh
 
-    sudo apt-get install python-virtualenv
-    cd supervision.website
-    chmod +x install.sh
-    ./install.sh
-
-    source bin/activate
-    (supervision.website) python
-    >>> import supervision.website
+  source bin/activate
+  (supervision.website) python
+  >>> import supervision.website
 
 Configuration
 ~~~~~~~~~~~~~~
 
 Create an edit the configuration file :
-
-    (supervision.website) cd src/supervision/website/
-    (supervision.website) cp config.py.sample config.py
-    (supervision.website) vi config.py
+::
+  (supervision.website) cd src/supervision/website/
+  (supervision.website) cp config.py.sample config.py
+  (supervision.website) vi config.py
 
 Add a cron JOB
 ~~~~~~~~~~~~~~~
 
 Create a file <where-you-want>/supervision_website_cron.sh with the following content (don't forget to adapt <egg-directory>). With this script, you can edit your configuration in config.py at any time, the check_hosts.sh script will be generated at each cron call. 
-
+::
     #!/bin/bash
     cd <egg-directory>
     source bin/activate
@@ -72,15 +72,15 @@ Create a file <where-you-want>/supervision_website_cron.sh with the following co
     python generate_reports.py
 
 Change permissions settings for the cron bash script :
-
+::
     chmod +x <where-you-want>/supervision_website_cron.sh
 
 Edit your personal crontab :
-
+::
     crontab -e
 
 And and adapt the following lines : 
-
+::
     # Launch supervision.website script every 10 minutes
     */10 * * * * <where-you-want>/supervision_website_cron.sh >> /tmp/supervision.website.cron.log
 
@@ -88,22 +88,22 @@ And and adapt the following lines :
 Launch tests
 ~~~~~~~~~~~~
 
-Launch tests with nose <https://nose.readthedocs.org/en/latest/>`_ ::
-
+Launch tests with nose <https://nose.readthedocs.org/en/latest/>`_ :
+::
     (supervision.website) nosetests
 
 Launch code coverage
 ~~~~~~~~~~~~~~~~~~~~
 
-Launch code coverage::
-
+Launch code coverage:
+::
     (supervision.website) nosetests --with-coverage --cover-inclusive --cover-html --cover-html-dir htmlcov
     And open with a browser htmlcov/index.html
 
 Credits
 -------
 
-    * Sylvain Boureliou [sylvainb] - `Bitbucket <https://bitbucket.org/sylvainb/>`_ - `Website <http://www.asilax.fr>`_
+    * Sylvain Boureliou [sylvainb] - `Github <https://github.com/sylvainb/>`_ - `Website <http://www.boureliou.com>`_
 
 Source code
 -----------
