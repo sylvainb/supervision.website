@@ -1,24 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """ Monkey-patch smtplib so we don't send actual emails.
 Thanks to http://www.psychicorigami.com/2007/09/20/monkey-patching-pythons-smtp-lib-for-unit-testing/
 
 Importing this module and smtplib.SMTP will refer to the DummySMTP bellow.
 
-It provides access to any sent messages via emailutils.inbox and the last 
+It provides access to any sent messages via emailutils.inbox and the last
 SMTP class created via emailutils.smtp.
 
-Example : 
+Example :
 
-	import emailutils
+    import emailutils
 
-	def test_some_email():
-	    emailutils.inbox = [] # clear the inbox
-	    # code that does some emailing here
-	    assert len(emailutils.inbox) == 1 # check one email was sent
-	    assert emailutils.inbox[0].to_address == 'someone@somewhere.com'
+    def test_some_email():
+        emailutils.inbox = [] # clear the inbox
+        # code that does some emailing here
+        assert len(emailutils.inbox) == 1 # check one email was sent
+        assert emailutils.inbox[0].to_address == 'someone@somewhere.com'
 """
 
 smtp = None
 inbox = []
+
 
 class Message(object):
 
@@ -26,6 +30,7 @@ class Message(object):
         self.from_address = from_address
         self.to_address = to_address
         self.fullmessage = fullmessage
+
 
 class DummySMTP(object):
 

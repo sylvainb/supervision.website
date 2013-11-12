@@ -1,5 +1,5 @@
 ###### System ######
-WGET_COMMAND='/opt/local/bin/wget'
+WGET_COMMAND = '/opt/local/bin/wget'
 # debian : WGET_COMMAND='/usr/bin/wget'
 
 ##### Timeout and status #####
@@ -18,30 +18,36 @@ OK_STATUSES = ['200', '302 200']
 ###### List of websites to monitor #####
 
 WEBSITE_URLS = [
-    {'url': 'http://www.yahoo.com',
-     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-     'ok_status_exceptions': []
+    {
+        'url': 'http://www.yahoo.com',
+        'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+        'ok_status_exceptions': []
     },
-    {'url': 'https://www.google.com',
-     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-     'ok_status_exceptions': []
+    {
+        'url': 'https://www.google.com',
+        'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+        'ok_status_exceptions': []
     },
-    {'url': 'http://www.france.fr/nous-contacter',
-     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-     'ok_status_exceptions': []
+    {
+        'url': 'http://www.france.fr/nous-contacter',
+        'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+        'ok_status_exceptions': []
     },
-    {'url': 'https://www.mycrm.com',
-     'slow_threshold': DEFAUL_SLOW_THRESHOLD,
-     'ok_status_exceptions': ['302 302 403']
+    {
+        'url': 'https://www.mycrm.com',
+        'slow_threshold': DEFAUL_SLOW_THRESHOLD,
+        'ok_status_exceptions': ['302 302 403']
     }
 ]
 WEBSITE_URLS_DICT = {}
-for el in WEBSITE_URLS: WEBSITE_URLS_DICT[el['url']] = el
+for el in WEBSITE_URLS:
+    WEBSITE_URLS_DICT[el['url']] = el
 
 ##### Reports #####
 
 # Reports folder, where status files and reports will be added
-REPORTS_PATH = "/Users/sbo/Documents/usine-plone/eggs/supervision.website/src/supervision/website/reports"
+REPORTS_PATH = "/Users/sbo/Documents/usine-plone/eggs/supervision.website/" \
+               "src/supervision/website/reports"
 
 ##### Mail configuration #####
 
@@ -58,5 +64,5 @@ MAIL_SUBJECT = 'Websites supervision report'
 
 # SMTP settings
 SMTP = 'localhost'
-SMTP_USER = '' # used if not empty
-SMTP_PASSWORD = '' # used if not empty
+SMTP_USER = ''  # used if not empty
+SMTP_PASSWORD = ''  # used if not empty

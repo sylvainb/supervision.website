@@ -1,13 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # http://docs.python.org/2/library/unittest.html
 
 import unittest
+
 
 import emailutils
 from supervision.website import config
 
 # TODO
-# monkey patching pythons smtp lib
-# http://www.psychicorigami.com/2007/09/20/monkey-patching-pythons-smtp-lib-for-unit-testing/
+# monkey patching python smtp lib
+# www.psychicorigami.com/2007/09/20/monkey-patching-pythons-smtp-lib-for-unit-testing/
+
 
 class TestSetupConfig(unittest.TestCase):
 
@@ -16,10 +21,12 @@ class TestSetupConfig(unittest.TestCase):
         config.TIMEOUT = 1000
         # etc......
 
+
 class TestGenerateCheckHostShScript(TestSetupConfig):
     # sh script generation
     # check all is ok
     pass
+
 
 class TestCheckHostShScript(TestSetupConfig):
     # extend setup to delete the reports folder and his content
@@ -34,20 +41,22 @@ class TestCheckHostShScript(TestSetupConfig):
     # check : sitemonitor.previous.status = initial sitemonitor.current.status
     pass
 
+
 class TestReadStatus(TestSetupConfig):
     # extend setup to delete the reports folder and his content
     # sh script generation
     # launch sh script to initialize folder structure
 
     # set custom sitemonitor.current.status & sitemonitor.previous.status
-    # with all possible configurations : SLOW_THRESHOLD, OK_STATUSES_PER_HOST, ...
+    # with all possible configurations : SLOW_THRESHOLD, OK_STATUSES_PER_HOST..
     # verifier read_status(status_type='current')
     # verifier read_status(status_type='previous')
 
     pass
 
+
 class TestGenerateReports(TestSetupConfig):
-	# ! test only complete report lines
+    # ! test only complete report lines
 
     # extend setup to delete the reports folder and his content
     # sh script generation
@@ -62,6 +71,7 @@ class TestGenerateReports(TestSetupConfig):
     # check reports txt/html
 
     pass
+
 
 class TestSendMail(TestSetupConfig):
     # extend setup to delete the reports folder and his content
@@ -98,7 +108,8 @@ class TestSendMail(TestSetupConfig):
 
     # test from/to... on the last message
 
-	pass
+    pass
+
 
 if __name__ == '__main__':
     unittest.main()
