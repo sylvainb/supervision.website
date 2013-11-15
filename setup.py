@@ -4,7 +4,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '1.0'
+version = '2.0dev'
 
 setup(name='supervision.website',
       version=version,
