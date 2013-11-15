@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 from setuptools import setup, find_packages
 
-version = '1.0dev'
+version = '1.0'
 
 setup(name='supervision.website',
       version=version,
