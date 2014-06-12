@@ -160,9 +160,6 @@ def process_report(current_datas, previous_datas):
         if has_change:
             # There was a change for a previous host
             pass
-        elif host['http_code'] != previous_http_code:
-            # The HTTP code has change
-            has_change = True
         elif status != previous_status \
             and (status == STATUS_KO
                  or previous_status == STATUS_KO):
