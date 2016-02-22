@@ -314,6 +314,8 @@ def send_report_by_mail(has_change):
 
     # Send the message via local SMTP server.
     s = smtplib.SMTP(SMTP)
+    if SMTP.endswith(':587'):
+        s.starttls()
     if SMTP_USER != '':
         s.login(SMTP_USER, SMTP_PASSWORD)
     s.sendmail(MAIL_SEND_FROM, MAIL_SEND_TO, msg.as_string())
